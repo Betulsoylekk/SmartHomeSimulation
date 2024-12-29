@@ -1,0 +1,13 @@
+@startuml
+[*] --> Standby
+Standby --> Standby: 20 <= temp <= 25
+Standby --> Cooling: temp > 25
+Cooling --> Standby: 20 <= temp <= 25
+Standby --> Heating: temp < 20
+Heating --> Standby: 20 <= temp <= 25
+Heating --> Heating: temp < 20
+Cooling --> Cooling: temp > 25
+Standby --> [*]: after 20 seconds
+Heating --> [*]: after 20 seconds
+Cooling --> [*]: after 20 seconds
+@enduml

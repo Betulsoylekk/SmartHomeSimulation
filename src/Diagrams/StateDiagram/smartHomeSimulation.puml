@@ -1,0 +1,59 @@
+@startuml
+[*] --> Main
+Main --> Simulation: run
+state forkSimulation <<fork>>
+Simulation --> forkSimulation: create\n components
+forkSimulation --> SmartHomeActivity: regulateTemperature()
+forkSimulation --> UserActivity: regulateDoorLock() / \n regulateLightBulb()
+
+state SmartHomeActivity {
+[*] --> SmartHome: openLights() / \n closeLights() / \n lockTheDoor() / \n unlockTheDoor() / \n regulateTemperature()
+SmartHome --> Thermostat: regulateTemperature()
+Thermostat --> SmartHome: Integer
+SmartHome --> DoorLock: regulateDoorLock()
+DoorLock --> SmartHome: Boolean
+SmartHome --> LightBulb: regulateLightBulb()
+LightBulb --> SmartHome: Boolean
+state DoorLock{
+     [*] --> Locked
+     Locked --> Unlocked: performAction(true)
+     Unlocked --> Locked: performAction(false)
+     Locked --> Locked: performAction(false)
+     Unlocked --> Unlocked: performAction(true)
+     Unlocked --> [*]: after 20 seconds
+     Locked --> [*]: after 20 seconds
+}
+state LightBulb {
+[*] --> Closed
+Closed --> Open: performAction(true)
+Open --> Closed: performAction(false)
+Closed --> Closed: performAction(false)
+Open --> Open: performAction(true)
+Open --> [*]: after 20 seconds
+Closed --> [*]: after 20 seconds
+}
+state Thermostat{
+[*] --> Standby
+Standby --> Standby: performAction(20 <= temp <= 25)
+Standby --> Cooling: performAction(temp > 25)
+Cooling --> Standby: performAction(20 <= temp <= 25)
+Standby --> Heating: performAction(temp < 20)
+Heating --> Standby: performAction(20 <= temp <= 25)
+Heating --> Heating: performAction(temp < 20)
+Cooling --> Cooling: performAction(temp > 25)
+Standby --> [*]: after 20 seconds
+Heating --> [*]: after 20 seconds
+Cooling --> [*]: after 20 seconds
+}
+
+}
+state UserActivity{
+[*] --> User
+User --> ControlPanel: openLights() / \n closeLights() / \n lockTheDoor() / \n unlockTheDoor()
+ControlPanel --> SmartHomeActivity: openLights() / \n closeLights() / \n lockTheDoor() / \n unlockTheDoor()
+}
+state joinSimulation <<join>>
+SmartHomeActivity --> haltSimulation
+haltSimulation --> Simulation: halt simulation
+Simulation --> [*]
+@enduml

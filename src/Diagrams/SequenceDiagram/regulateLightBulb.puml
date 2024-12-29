@@ -1,0 +1,22 @@
+@startuml
+participant LightBulb order 300
+participant ControlPanel order 100
+participant SmartHome order 200
+participant Helper order 500
+participant LightSensor order 400
+
+
+LightBulb -> LightBulb: initially\nisOpen = false
+ControlPanel -> SmartHome: command
+alt command == closeLights
+SmartHome -> LightBulb: performAction(false)
+LightBulb -> SmartHome:
+SmartHome -> LightSensor: setIsOpen(false)
+LightSensor -> Helper: display()
+else command == openLights
+SmartHome -> LightBulb: performAction(true)
+LightBulb -> SmartHome:
+SmartHome -> LightSensor: setIsOpen(true)
+LightSensor -> Helper: display()
+end
+@enduml

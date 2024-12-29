@@ -1,0 +1,9 @@
+@startuml
+[*] --> Closed
+Closed --> Open: performAction(true)
+Open --> Closed: performAction(false)
+Closed --> Closed: performAction(false)
+Open --> Open: performAction(true)
+Open --> [*]: after 20 seconds
+Closed --> [*]: after 20 seconds
+@enduml

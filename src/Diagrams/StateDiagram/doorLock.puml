@@ -1,0 +1,9 @@
+@startuml
+[*] --> Locked
+Locked --> Unlocked: performAction(true)
+Unlocked --> Locked: performAction(false)
+Locked --> Locked: performAction(false)
+Unlocked --> Unlocked: performAction(true)
+Unlocked --> [*]: after 20 seconds
+Locked --> [*]: after 20 seconds
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+participant MotionSensor order 200
+participant SmartHome order 100
+participant ControlPanel order 90
+participant DoorLock order 300
+participant Helper order 500
+
+DoorLock -> DoorLock: initially\nisLocked = true
+ControlPanel -> SmartHome: command
+alt command == lockTheDoor()
+SmartHome -> DoorLock: performAction(true)
+DoorLock -> SmartHome:
+SmartHome -> MotionSensor: setIsOpen(false)
+MotionSensor -> Helper: display()
+else command == unlockTheDoor()
+SmartHome -> DoorLock: performAction(false)
+DoorLock -> SmartHome:
+SmartHome -> MotionSensor: setIsOpen(true)
+MotionSensor -> Helper: display()
+end
+@enduml

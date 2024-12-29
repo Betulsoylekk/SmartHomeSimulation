@@ -1,0 +1,21 @@
+@startuml
+participant TemperatureSensor order 200
+participant SmartHome order 100
+participant Thermostat order 300
+participant Helper order 500
+
+TemperatureSensor -> Helper: generateRandTemperatureValue()
+Helper --> TemperatureSensor: int
+SmartHome -> TemperatureSensor: getSensedValue()
+TemperatureSensor --> SmartHome: Integer
+alt 20 <= currentTemperature <= 25
+SmartHome -> Helper: No action required
+else
+    loop currentTemperature > 25 || currentTemperature < 20
+    SmartHome -> Thermostat: performAction(int currTemp)
+    Thermostat -> SmartHome: int updatedTemp
+    SmartHome -> TemperatureSensor: setTemperature(int updatedTemp)
+    TemperatureSensor -> Helper: Displays updated temp
+    end
+end
+@enduml

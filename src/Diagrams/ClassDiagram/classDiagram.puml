@@ -1,0 +1,81 @@
+@startuml
+interface Sensor {
+        getSensedValue(): Object
+        setSensedValue(sensedValue: Object): void
+}
+class TemperatureSensor {
+    -currentTemperature: int
+    +TemperatureSensor(initialTemperature: int)
+}
+class LightSensor {
+    -isOpen: boolean
+}
+class MotionSensor {
+    -isMotionDetected: boolean
+}
+interface Actuator {
+    +performAction(): void
+}
+class Thermostat {
+    -desiredTemperatureLowValue: int;
+    -desiredTemperatureHighValue: int;
+    -currentState: STATE;
+    +Thermostat(desTempLowVal: int, desTempHighVal: int)
+    -activateHeatingState(): void
+    -activateCoolingState(): void
+    -deactivateTheThermostat(): void
+    -getDesiredTemperatureHighValue(): int
+    -getDesiredTemperatureLowValue(): int
+}
+class LightBulb {
+    -isOpen: boolean
+    -getIsOpen: boolean
+    -setIsOpen(boolean isOpen): void
+}
+class DoorLock {
+    -isLocked: boolean
+    -getIsLocked(): boolean
+    -setIsLocked(boolean isLocked): void
+}
+interface ControlPanel {
+    +openLights(): void
+    +closeLights(): void
+    +lockTheDoor(): void
+    +unlockTheDoor(): void
+    +setMediator(Mediator mediator): void
+}
+class UserControlPanel {
+}
+interface SmartHome {
+    -temperatureSensor: TemperatureSensor
+    -lightSensor: LightSensor
+    -motionSensor: MotionSensor
+    -thermostat: Thermostat
+    -lightBulb: LightBulb
+    -doorLock: DoorLock
+    +regulateTemperature(int currentTemp): void
+    +regulateLightBulb(boolean isOpen): void
+    +regulateDoorLock(boolean isLocked): void
+    +updateLights: void
+    +updateDoor: void
+}
+class User {
+   -controlPanel: ControlPanel
+   +openLights(): void
+   +closeLights(): void
+   +lockTheDoor(): void
+   +unlockTheDoor(): void
+}
+
+ControlPanel o-- SmartHome
+Sensor --o  SmartHome
+Actuator --o SmartHome
+Sensor <|-- TemperatureSensor
+Sensor <|-- LightSensor
+Sensor <|-- MotionSensor
+Thermostat  --|>  Actuator
+LightBulb  --|>   Actuator
+DoorLock  --|> Actuator
+ControlPanel <|--  UserControlPanel
+User o-- ControlPanel
+@enduml
